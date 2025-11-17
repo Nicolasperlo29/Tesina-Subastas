@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Usuarios (2)" />
+        <module name="Notifications" />
+        <module name="Usuarios (1)" />
+        <module name="Usuarios" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Auth-Service" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Auth-Service" options="-parameters" />
+      <module name="Notifications" options="-parameters" />
+      <module name="Usuarios" options="-parameters" />
+      <module name="Usuarios (1)" options="-parameters" />
+      <module name="Usuarios (2)" options="-parameters" />
+    </option>
+  </component>
+</project>
