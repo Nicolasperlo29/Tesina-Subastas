@@ -1,0 +1,187 @@
+<header [class.scrolled]="scrolled">
+  <nav>
+    <!-- LOGO -->
+    <div class="logo" [routerLink]="['']">
+      <span class="logo-text">SubastasYa</span>
+    </div>
+
+    <!-- MENÚ DESKTOP -->
+    <ul class="nav-desktop">
+      <li><a [routerLink]="['/subastas']" routerLinkActive="active">Subastas</a></li>
+      <li><a [routerLink]="['/vender']" routerLinkActive="active">Vender</a></li>
+
+      <!-- AYUDA -->
+      <li><a [routerLink]="['/ayuda']" routerLinkActive="active">
+          <i class="fa-solid fa-circle-question"></i> Ayuda
+        </a></li>
+
+      <!-- CONTACTO DIRECTO -->
+      <li class="contact-info">
+        <i class="fa-solid fa-phone"></i>
+        <span>0351 123-4567</span>
+      </li>
+
+      <!-- SELECTOR DE IDIOMA -->
+      <li class="language-selector">
+        <i class="fa-solid fa-globe"></i>
+        <select (change)="cambiarIdioma($event)">
+          <option value="es">🇦🇷 ES</option>
+          <option value="en">🇺🇸 EN</option>
+          <option value="pt">🇧🇷 PT</option>
+        </select>
+      </li>
+
+      @if (logeado) {
+
+      <!-- PERFIL -->
+      <li class="icon-item">
+        <i class="fa-solid fa-user profile" [routerLink]="['/profile']"></i>
+      </li>
+
+      <!-- NOTIFICACIONES -->
+      <li class="nav-item dropdown">
+        <i class="fa-solid fa-bell campanita" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          @if (notifications.length > 0) {
+          <span class="notification-badge">{{ notifications.length }}</span>
+          }
+        </i>
+        <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px; max-height: 300px; overflow-y: auto;">
+          @if (notifications.length > 0) {
+          @for (item of notifications; track $index) {
+          <li class="d-flex justify-content-between gap-3 border-bottom mb-2 pb-1">
+            <strong style="font-size: 14px;">{{ item.asunto | slice:0:10 }}...</strong>
+            <small class="text-muted">{{ item.fechaEnvio | date }}</small>
+            <button class="btn btn-danger btn-sm" [routerLink]="['/notifications']">Ver</button>
+          </li>
+          }
+          }
+          @if (notifications.length <= 0) { <p class="text-center text-muted my-3">No hay notificaciones</p>
+            }
+        </ul>
+      </li>
+
+      @if (isAdmin) {
+      <li><button class="btn btn-primary" [routerLink]="['/admin']">Configuración</button></li>
+      }
+      }
+
+      @if (!logeado) {
+      <li><a [routerLink]="['/login']" class="btn-login">Ingresar</a></li>
+      }
+    </ul>
+
+    <!-- BOTÓN MOBILE -->
+    <button class="mobile-menu-toggle" (click)="toggleMobileMenu()">
+      <i [class]="mobileMenuOpen ? 'fa-solid fa-times' : 'fa-solid fa-bars'"></i>
+    </button>
+  </nav>
+
+  <!-- MENÚ MOBILE -->
+  <div class="mobile-menu" [class.open]="mobileMenuOpen">
+    <ul>
+      <li><a [routerLink]="['']" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-house"></i> Home
+        </a></li>
+
+      <li><a [routerLink]="['/subastas']" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-gavel"></i> Subastas
+        </a></li>
+
+      <li><a [routerLink]="['/vender']" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-tag"></i> Vender
+        </a></li>
+
+      <li><a [routerLink]="['/ayuda']" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-circle-question"></i> Ayuda
+        </a></li>
+
+      <li class="mobile-contact">
+        <i class="fa-solid fa-phone"></i>
+        <a href="tel:03511234567">0351 123-4567</a>
+      </li>
+
+      <li class="mobile-language">
+        <i class="fa-solid fa-globe"></i>
+        <select (change)="cambiarIdioma($event)">
+          <option value="es">🇦🇷 Español</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="pt">🇧🇷 Português</option>
+        </select>
+      </li>
+
+      @if (logeado) {
+      <li><a [routerLink]="['/profile']" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-user"></i> Perfil
+        </a></li>
+
+      <li><a [routerLink]="['/notifications']" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-bell"></i> Notificaciones
+          @if (notifications.length > 0) {
+          <span class="mobile-badge">{{ notifications.length }}</span>
+          }
+        </a></li>
+
+      <li class="mobile-balance">
+        <i class="fa-solid fa-wallet"></i>
+        <span>Saldo: ${{ userBalance || '0.00' }}</span>
+      </li>
+
+      @if (isAdmin) {
+      <li><a [routerLink]="['/admin']" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-gear"></i> Configuración
+        </a></li>
+      }
+      }
+
+      @if (!logeado) {
+      <li><a [routerLink]="['/login']" (click)="closeMobileMenu()" class="btn-login">
+          <i class="fa-solid fa-right-to-bracket"></i> Ingresar
+        </a></li>
+      }
+    </ul>
+  </div>
+</header>
+
+<router-outlet></router-outlet>
+
+<footer id="contacto">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>SubastasYa</h3>
+      <p>Redefiniendo el estándar del mercado de subastas desde 1995</p>
+      <div class="social-icons">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h3>Navegación</h3>
+      <a href="#inicio">Inicio</a>
+      <a href="#propiedades">Subastas</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="footer-section">
+      <h3>Contacto</h3>
+      <p><i class="fa-solid fa-phone"></i> +54 11 5555-8888</p>
+      <p><i class="fa-solid fa-envelope"></i> subastasya.com</p>
+      <p><i class="fa-solid fa-location-dot"></i> Av. Libertador 1234, CABA</p>
+    </div>
+    <div class="footer-section">
+      <h3>Horarios</h3>
+      <p>Lunes - Viernes: 9:00 - 19:00</p>
+      <p>Sábados: 10:00 - 14:00</p>
+      <p>Domingos: Cerrado</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 SubastasYa. Todos los derechos reservados.</p>
+    <div class="footer-links">
+      <a [routerLink]="['/terminos']">Términos y Condiciones</a>
+      <span>|</span>
+      <a href="#">Política de Privacidad</a>
+    </div>
+  </div>
+</footer>

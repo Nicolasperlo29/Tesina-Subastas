@@ -1,0 +1,31 @@
+<div class="login-wrapper">
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="login-glass" novalidate>
+    <h2 class="text-center mb-4 fw-semibold">Recuperar contraseña</h2>
+    <p>Ingresa tu email para recuperar la contraseña</p>
+    <!-- Email -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        [(ngModel)]="email"
+        class="form-control input-glass"
+        required
+        email
+        #emailRef="ngModel"
+      />
+      <div *ngIf="emailRef.invalid && emailRef.touched" class="text-danger small">
+        Ingresa un email válido.
+      </div>
+    </div>
+
+    <!-- Botón -->
+    <button type="submit" class="btn btn-dark w-100 rounded-pill py-2" [disabled]="loginForm.invalid">
+      Enviar
+    </button>
+
+    <p *ngIf="message" class="text-success">{{ message }}</p>
+    <div *ngIf="error" class="text-danger mt-3 text-center small">{{ error }}</div>
+  </form>
+</div>

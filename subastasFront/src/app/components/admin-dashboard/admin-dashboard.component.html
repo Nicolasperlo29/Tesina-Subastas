@@ -1,0 +1,176 @@
+<div class="container py-5">
+  <h2 class="mb-4">Panel de Administrador</h2>
+
+  <div class="d-flex flex-column flex-sm-row gap-3 mb-5">
+    <button class="btn btn-success" [routerLink]="['/register']">
+      Dar de alta usuario
+    </button>
+
+    <button class="btn btn-danger" (click)="openModal()">
+      Dar de baja usuario
+    </button>
+
+    <button class="btn btn-info text-white" (click)="consultarUsuarios()">
+      Consultar usuarios
+    </button>
+
+    <button class="btn btn-info text-white" (click)="consultarNotificaciones()">
+      Consultar notificaciones
+    </button>
+  </div>
+
+  <!-- Modal de lista de usuarios -->
+   <div *ngIf="isModalUsersOpen" class="modal-backdrop-custom">
+    <div class="modal-content-custom position-relative">
+
+    <div class="d-flex justify-content-between">
+      <h5 class="mb-3">Usuarios registrados</h5>
+      <button class="btn-close position-absolute top-0 end-0 m-2" style="background-color: gray;" (click)="cerrarModalUsuarios()" aria-label="Cerrar"></button>
+    </div>
+    <input
+      type="text"
+      class="form-control mb-3"
+      placeholder="Buscar por email"
+      [(ngModel)]="filtroEmail"
+    />
+    <div
+      *ngFor="let item of usuarios | filterByEmail:filtroEmail"
+      class="border-bottom pb-2 mb-2"
+    >
+      <p class="mb-1"><strong>Nombre:</strong> {{ item.name }}</p>
+      <p class="mb-1"><strong>Apellido:</strong> {{ item.lastname }}</p>
+      <p class="mb-0"><strong>Email:</strong> {{ item.email }}</p>
+    </div>
+
+    <button class="btn btn-secondary w-100 mt-2" (click)="cerrarModalUsuarios()">Cerrar</button>
+  </div>
+</div>
+
+<div *ngIf="isModalNotificationsOpen" class="modal-backdrop-custom">
+    <div class="modal-content-custom position-relative">
+
+    <div class="d-flex justify-content-between">
+      <h5 class="mb-3">Notificaciones</h5>
+      <button class="btn-close position-absolute top-0 end-0 m-2" style="background-color: gray;" (click)="cerrarModalNotifications()" aria-label="Cerrar"></button>
+    </div>
+    <input
+      type="text"
+      class="form-control mb-3"
+      placeholder="Buscar por email"
+      [(ngModel)]="filtroEmail"
+    />
+
+    <input
+      type="date"
+      class="form-control mb-3"
+      placeholder="Buscar por fecha"
+      [(ngModel)]="filtroFecha"
+    />
+
+    <div
+      *ngFor="let item of notifications | filterNotificationsByEmail:filtroEmail:filtroFecha"
+      class="border-bottom pb-2 mb-2"
+    >
+      <p class="mb-1"><strong>Destinatario:</strong> {{ item.destinatario }}</p>
+      <p class="mb-1"><strong>Asunto:</strong> {{ item.asunto }}</p>
+      <p class="mb-0"><strong>Cuerpo:</strong> {{ item.cuerpo }}</p>
+      <p class="mb-0"><strong>Fecha envio:</strong> {{ item.fechaEnvio | date }}</p>
+    </div>
+
+    <button class="btn btn-secondary w-100 mt-2" (click)="cerrarModalNotifications()">Cerrar</button>
+  </div>
+</div>
+
+  <!-- Modal de baja -->
+  <div *ngIf="isModalOpen" class="modal-backdrop-custom">
+    <div class="modal-content-custom">
+      <h5>Dar de baja usuario</h5>
+      <p>Ingrese el email</p>
+      <input type="text" class="form-control mb-3" [(ngModel)]="emailBaja" placeholder="Email del usuario">
+      <button class="btn btn-primary w-100 mb-2" (click)="confirmarBaja()">Aceptar</button>
+      <button class="btn btn-secondary w-100" (click)="cerrarModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4" style="margin-bottom: 80px;">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>Informe de Rendimiento de Vendedores</h2>
+    <button class="btn btn-primary mb-3" (click)="descargarPDFVendedores()">Descargar PDF</button>
+  </div>
+
+  <table class="table table-bordered table-striped mt-3">
+    <thead class="table-dark scrollable-table-header">
+      <tr>
+        <th>ID Vendedor</th>
+        <th>Subastas Finalizadas</th>
+        <th>Vendidas</th>
+        <th>Total Vendido</th>
+        <th>Promedio por Venta</th>
+      </tr>
+    </thead>
+    <tbody class="scrollable-table-body">
+      <tr *ngFor="let item of informe">
+        <td>{{ item.idVendedor }}</td>
+        <td>{{ item.subastasFinalizadas }}</td>
+        <td>{{ item.subastasVendidas }}</td>
+        <td>{{ item.totalVendido | currency:'ARS':'symbol':'1.2-2' }}</td>
+        <td>{{ item.promedioVenta | currency:'ARS':'symbol':'1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container mt-4" style="margin-bottom: 80px;">
+  
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>Reporte de Pujas por Usuario</h2>
+    <button class="btn btn-primary mb-3" (click)="descargarPDFPujas()">Descargar PDF</button>
+  </div>
+
+  <table class="table table-bordered mt-3">
+    <thead class="table-dark scrollable-table-header">
+      <tr>
+        <th>ID Usuario</th>
+        <th>Cantidad de Pujas</th>
+        <th>Total Ofertado</th>
+        <th>Promedio Ofertado</th>
+      </tr>
+    </thead>
+    <tbody class="scrollable-table-body">
+      <tr *ngFor="let r of reporte">
+        <td>{{ r.userId }}</td>
+        <td>{{ r.cantidadPujas }}</td>
+        <td>{{ r.totalOfertado | currency:'ARS' }}</td>
+        <td>{{ r.promedioOfertado | currency:'ARS' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container mt-4">
+  
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>Listado de subastas activas</h2>
+    <button class="btn btn-primary mb-3" (click)="descargarPDFSubastasActivas()">Descargar PDF</button>
+  </div>
+
+  <table class="table table-bordered mt-3">
+    <thead class="table-dark scrollable-table-header">
+      <tr>
+        <th>Titulo</th>
+        <th>Fecha fin</th>
+        <th>Precio inicial</th>
+        <th>Email creador</th>
+      </tr>
+    </thead>
+    <tbody class="scrollable-table-body">
+      <tr *ngFor="let s of subastasActivas">
+        <td>{{ s.title }}</td>
+        <td>{{ s.fechaFin | date }}</td>
+        <td>{{ s.precioInicial | currency:'ARS' }}</td>
+        <td>{{ s.emailCreador }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

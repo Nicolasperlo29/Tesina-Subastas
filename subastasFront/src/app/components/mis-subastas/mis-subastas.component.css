@@ -1,0 +1,63 @@
+.contenedorSubastas {
+    width: 90%;
+    margin: 60px auto;
+    display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+  
+  .card-subasta {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.17);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 380px;
+    max-width: 380px;
+  }
+  
+  .card-subasta img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .card-subasta .contenido {
+    padding: 16px;
+  }
+  
+  .card-subasta h4 {
+    font-size: 1.1rem;
+    margin: 0 0 8px;
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+  
+  .card-subasta .ubicacion {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  
+  .card-subasta .precio {
+    font-size: 1.1rem;
+    color: #28a745;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+  
+  .btn-ver-mas {
+    background-color: #9a9696;
+    color: #000000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .btn-ver-mas:hover {
+    background-color: #b8b8b8;
+  }

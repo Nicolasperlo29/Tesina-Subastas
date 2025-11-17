@@ -1,0 +1,48 @@
+  .login-wrapper {
+  min-height: 92.3vh;
+  background: linear-gradient(135deg, #dbe6f6, #b63623);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-glass {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  color: #000;
+}
+
+.input-glass {
+  background-color: rgba(255, 255, 255, 0.6);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: all 0.3s ease;
+}
+
+.input-glass:focus {
+  background-color: #fff;
+  outline: none;
+  box-shadow: 0 0 0 2px #6c63ff33;
+}
+
+.btn-dark {
+  background: #6c63ff;
+  border: none;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.btn-dark:hover {
+  background: #574fd6;
+}

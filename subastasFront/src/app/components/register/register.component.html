@@ -1,0 +1,183 @@
+<div class="register-container">
+  <div class="register-card">
+    <!-- Header -->
+    <div class="register-header">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </div>
+      <h2>Crear Cuenta</h2>
+      <p>Únete a nuestra comunidad de subastas</p>
+    </div>
+
+    <!-- Social Register Buttons -->
+    <div class="social-register">
+      <button type="button" class="social-btn google-btn">
+        <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
+            fill="#4285F4" />
+          <path
+            d="M9.003 18c2.43 0 4.467-.806 5.956-2.184l-2.909-2.258c-.806.54-1.836.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.96v2.332C2.44 15.983 5.485 18 9.003 18z"
+            fill="#34A853" />
+          <path
+            d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9.001c0 1.452.348 2.827.957 4.041l3.007-2.332z"
+            fill="#FBBC05" />
+          <path
+            d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.426 0 9.003 0 5.485 0 2.44 2.017.96 4.958L3.967 7.29c.708-2.127 2.692-3.71 5.036-3.71z"
+            fill="#EA4335" />
+        </svg>
+        Registrarse con Google
+      </button>
+
+      <button type="button" class="social-btn facebook-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+            fill="white" />
+        </svg>
+        Registrarse con Facebook
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider">
+      <span>O regístrate con email</span>
+    </div>
+
+    <!-- Register Form -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-group">
+        <label for="inputName">Nombre</label>
+
+        <div class="input-wrapper">
+          <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <input type="text" id="inputName" formControlName="name" placeholder="Juan"
+            [class.error]="submitted && f['name']?.errors">
+        </div>
+        <div class="error-message" *ngIf="submitted && f['name']?.errors">
+          <small *ngIf="f['name']?.errors?.['required']">El nombre es obligatorio.</small>
+          <small *ngIf="f['name']?.errors?.['minlength']">Mínimo 3 caracteres.</small>
+          <small *ngIf="registerForm.get('name')?.hasError('pattern')">
+            Solo letras
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="lastname">Apellido</label>
+        <div class="input-wrapper">
+          <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <input type="text" id="inputLastname" formControlName="lastname" placeholder="Pérez"
+            [class.error]="submitted && f['lastname']?.errors">
+        </div>
+        <div class="error-message" *ngIf="submitted && f['lastname']?.errors">
+          <small *ngIf="f['lastname']?.errors?.['required']">El apellido es obligatorio.</small>
+          <small *ngIf="f['lastname']?.errors?.['minlength']">Mínimo 3 caracteres.</small>
+          <small *ngIf="registerForm.get('lastname')?.hasError('pattern')">
+            Solo letras
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrapper">
+          <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <input type="email" id="email" formControlName="email" placeholder="tu@email.com"
+            [class.error]="submitted && f['email']?.errors">
+        </div>
+        <div class="error-message" *ngIf="submitted && f['email']?.errors">
+          <small *ngIf="f['email']?.errors?.['required']">El email es obligatorio.</small>
+          <small *ngIf="f['email']?.errors?.['email']">Email no válido.</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <div class="input-wrapper">
+          <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <input type="password" id="password" formControlName="password" placeholder="••••••••"
+            [class.error]="submitted && f['password']?.errors">
+        </div>
+        <div class="error-message" *ngIf="submitted && f['password']?.errors">
+          <small *ngIf="f['password']?.errors?.['required']">La contraseña es obligatoria.</small>
+          <small *ngIf="f['password']?.errors?.['minlength']">Mínimo 6 caracteres.</small>
+        </div>
+      </div>
+
+      @if (isAdmin) {
+      <div class="input-group">
+        <i class="fas fa-user-shield"></i> <!-- icono de admin -->
+        <input type="text" id="inputRol" placeholder="Rol" formControlName="rol" />
+      </div>
+      }
+
+      <div class="checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="acceptTerms">
+          <span>Acepto los <a href="/terms" target="_blank">términos y condiciones</a> y la <a href="/privacy"
+              target="_blank">política de privacidad</a></span>
+        </label>
+        <div class="error-message" *ngIf="submitted && f['acceptTerms']?.errors">
+          <small *ngIf="f['acceptTerms']?.errors?.['required']">Debes aceptar los términos y
+            condiciones.</small>
+        </div>
+      </div>
+
+      <div class="captcha">
+        <re-captcha siteKey="6LftLzArAAAAAFYp4xMdYFUHBiTiVbBvgizz-uvi"
+          (resolved)="onCaptchaResolved($event)"></re-captcha>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        Crear Cuenta
+      </button>
+    </form>
+
+    <!-- Login Link -->
+    <div class="login-link">
+      <p>¿Ya tienes una cuenta? <a href="/login" routerLink="/login">Inicia sesión aquí</a></p>
+    </div>
+  </div>
+
+  <div *ngIf="isModalOpen"
+    class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+    style="background: rgba(0, 0, 0, 0.6); z-index: 1050;">
+
+    <div class="bg-white p-4 rounded-4 shadow-lg animate__animated animate__fadeIn"
+      style="max-width: 420px; width: 90%;">
+
+      <div class="text-center mb-3">
+        <i class="bi bi-check-circle-fill text-success fs-1"></i>
+      </div>
+
+      <h4 class="text-center text-dark fw-semibold">¡Usuario creado con éxito!</h4>
+
+      <p class="text-center text-muted mt-2 mb-3">
+        Para iniciar sesión, primero debes verificar tu cuenta mediante el enlace que enviamos a tu correo
+        electrónico.
+      </p>
+
+      <button class="btn btn-primary w-100" (click)="cerrarModal()">Aceptar</button>
+    </div>
+  </div>

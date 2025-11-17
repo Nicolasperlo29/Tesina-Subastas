@@ -1,0 +1,189 @@
+<div class="main-container">
+  <!-- Header con estadísticas -->
+
+  <!-- Tarjeta de perfil -->
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="avatar">{{ getInitials() }}</div>
+      <div class="profile-info" style="flex: 1;">
+        <h2>{{ usuarioEditar?.name }} {{ usuarioEditar?.lastname }}</h2>
+        <p>{{ usuario?.email }}</p>
+        <span class="badge-verified">✓ Cuenta Verificada</span>
+      </div>
+      <button class="btn-auction btn-gold" (click)="editar()" *ngIf="!isEditMode">Editar Perfil</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-field" *ngFor="let field of profileFields">
+        <label>{{ field.label }}</label>
+        <input type="text" [(ngModel)]="field.placeholder" [disabled]="field.label === 'País' || !isEditMode"
+          class="form-control">
+      </div>
+    </div>
+
+    <div class="action-buttons" *ngIf="isEditMode">
+      <button class="btn-auction btn-success" (click)="guardarEdicion()">💾 Guardar Cambios</button>
+      <button class="btn-auction btn-outline" (click)="cancelarEdicion()">✕ Cancelar</button>
+    </div>
+
+    <div style="border-top: 2px solid rgba(212, 175, 55, 0.2); margin: 30px 0; padding-top: 25px;">
+      <div class="action-buttons">
+        <button class="btn-auction btn-danger" (click)="openModalEliminarCuenta()">🗑️ Eliminar Cuenta</button>
+        <button class="btn-auction btn-outline" (click)="logout()">🚪 Cerrar Sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Secciones de subastas -->
+  <div class="row g-4">
+    <!-- Pujas Activas -->
+    <div class="col-12 col-xl-6">
+      <div class="auction-section bids">
+        <div class="section-header">
+          <div class="section-title">
+            <div class="section-icon">🔨</div>
+            <h3>Mis Pujas</h3>
+          </div>
+          <span class="section-count">{{ pujas.length }} Pujas</span>
+        </div>
+        <div class="scroll-container">
+          <div *ngIf="pujas.length === 0" class="empty-state">
+            <div class="empty-icon">🔨</div>
+            <div class="empty-text">No tienes pujas</div>
+          </div>
+
+          <div class="auction-item" *ngFor="let puja of pujas">
+            <div class="item-content">
+              <div class="item-details">
+                <span class="bid-amount">{{ puja.valor | currency:'ARS':'symbol':'1.2-2':'es-AR' }}</span>
+                <div class="bid-time">🕐 {{ puja.fechaCreada | date:'dd/MM/yyyy HH:mm' }}</div>
+                <span class="bid-status status-active">{{ puja.estado }}</span>
+              </div>
+              <div class="item-actions">
+                <button class="btn-small btn-cancel" (click)="abrirModalPuja(puja.id)">Cancelar</button>
+                <button class="btn-small btn-view" [routerLink]="['/subasta/' + puja.subastaId]">Ver Subasta</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subastas Ganadas -->
+    <div class="col-12 col-xl-6">
+      <div class="auction-section won">
+        <div class="section-header">
+          <div class="section-title">
+            <div class="section-icon">🏆</div>
+            <h3>Subastas Ganadas</h3>
+          </div>
+          <span class="section-count">{{ subastasGanadas.length }} Ganadas</span>
+        </div>
+        <div class="scroll-container">
+          <div *ngIf="subastasGanadas.length === 0" class="empty-state">
+            <div class="empty-icon">🏆</div>
+            <div class="empty-text">Aún no has ganado ninguna subasta</div>
+          </div>
+
+          <div class="auction-item" *ngFor="let subasta of subastasGanadas">
+            <div class="won-item">
+              <img [src]="subasta.imagenes[0] || 'https://via.placeholder.com/80/d4af37/ffffff?text=Subasta'"
+                [alt]="subasta.title"
+                style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover; border: 2px solid var(--primary-gold);">
+              <div class="won-info">
+                <div class="won-title">{{ subasta.title }}</div>
+                <div class="won-price">{{ subasta.precioInicial | currency:'ARS':'symbol':'1.2-2':'es-AR' }}</div>
+                <div class="bid-time">🏁 Finalizado: {{ subasta.fechaFin | date:'dd/MM/yyyy' }}</div>
+                <span class="bid-status status-won">✓ Ganada</span>
+              </div>
+              <div class="item-actions">
+                <button class="btn-small btn-view" [routerLink]="['/subasta/' + subasta.id]">Ver Detalles</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Historial de Pagos -->
+    <div class="col-12">
+      <div class="auction-section payments">
+        <div class="section-header">
+          <div class="section-title">
+            <div class="section-icon">💳</div>
+            <h3>Historial de Pagos</h3>
+          </div>
+          <span class="section-count">{{ calcularTotalPagos() | currency:'ARS':'symbol':'1.0-0':'es-AR' }}</span>
+        </div>
+        <div *ngIf="pagos.length === 0" class="empty-state">
+          <div class="empty-icon">💳</div>
+          <div class="empty-text">No hay pagos registrados</div>
+        </div>
+
+        <div class="payment-grid" *ngIf="pagos.length > 0">
+          <div class="payment-card" *ngFor="let pago of pagos">
+            <div class="payment-amount">{{ pago.monto | currency:'ARS':'symbol':'1.2-2':'es-AR' }}</div>
+            <div class="payment-detail"><strong>Email:</strong> {{ pago.emailUsuario }}</div>
+            <div class="payment-detail"><strong>Fecha:</strong> {{ pago.fechaConfirmacion | date:'dd/MM/yyyy HH:mm' }}
+            </div>
+            <div class="payment-detail"><strong>Estado:</strong> <span style="color: var(--success-green);">✓
+                Confirmado</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Eliminar Cuenta -->
+<div *ngIf="isModalOpen" class="modal-overlay">
+  <div class="modal-content">
+    <h4>⚠️ Eliminar Cuenta Permanentemente</h4>
+    <p>Esta acción es irreversible y perderás todas tus pujas activas, subastas ganadas e historial.</p>
+    <p>Para confirmar, escribe <strong style="color: var(--primary-gold);">"confirmar"</strong> en el campo:</p>
+    <input type="text" [(ngModel)]="textoEliminar" placeholder="Escribe aquí...">
+    <div class="modal-buttons">
+      <button class="btn-auction btn-outline" style="flex: 1;" (click)="cerrarModal()">Cancelar</button>
+      <button class="btn-auction btn-danger" style="flex: 1;" (click)="eliminarCuenta()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Cancelar Puja -->
+<div *ngIf="isModalPujaOpen" class="modal-overlay">
+  <div class="modal-content">
+    <h4>🔨 Cancelar Puja</h4>
+    <p>¿Estás seguro que deseas cancelar esta puja? Esta acción no se puede deshacer.</p>
+    <p style="color: var(--warning-amber); font-weight: 600;">⚠️ Solo puedes cancelar pujas realizadas en los últimos 10
+      minutos.</p>
+    <div class="modal-buttons">
+      <button class="btn-auction btn-outline" style="flex: 1;" (click)="cerrarModal()">No, mantener</button>
+      <button class="btn-auction btn-danger" style="flex: 1;" (click)="cancelarPuja()">Sí, cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Error Tiempo Excedido -->
+<div *ngIf="isModalErrorOpen" class="modal-overlay">
+  <div class="modal-content">
+    <h4>⏰ Tiempo Excedido</h4>
+    <p>Han pasado más de 10 minutos desde que realizaste esta puja.</p>
+    <p style="color: var(--text-muted);">Por políticas de la plataforma, solo se pueden cancelar pujas dentro de los
+      primeros 10 minutos.</p>
+    <button class="btn-auction btn-gold" style="width: 100%;" (click)="cerrarModal()">Entendido</button>
+  </div>
+</div>
+
+<!-- Modal Genérico -->
+<div *ngIf="showModal" class="modal-overlay">
+  <div class="modal-content">
+    <p style="font-size: 16px; color: var(--text-light);">{{ modalMessage }}</p>
+    <div class="modal-buttons" *ngIf="showButtons">
+      <button class="btn-auction btn-outline" style="flex: 1;" (click)="closeModal()">No</button>
+      <button class="btn-auction btn-success" style="flex: 1;" (click)="confirm()">Sí</button>
+    </div>
+    <div *ngIf="!showButtons">
+      <button class="btn-auction btn-gold" style="width: 100%;" (click)="closeModal()">Aceptar</button>
+    </div>
+  </div>
+</div>

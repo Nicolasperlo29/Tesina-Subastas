@@ -1,0 +1,185 @@
+<div class="auction-container">
+
+  <!-- Header Sticky -->
+  <header class="auction-header">
+    <div class="header-content">
+      <div class="header-left">
+        <h1 class="auction-title">{{ subasta?.title }}</h1>
+        <div class="header-meta">
+          <span class="badge-location">📍 {{ subasta?.ubicacion }}</span>
+          <span class="badge-category">🏷️ {{ subasta?.categoria }}</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="timer-box">
+          <span class="timer-label">Tiempo restante</span>
+          <span class="timer-value">{{ tiempoRestante }}</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Grid -->
+  <div class="auction-content">
+    
+    <!-- Left Column: Gallery -->
+    <div class="gallery-column">
+      <div class="image-gallery">
+        <div class="main-image-container">
+          <img [src]="imagenPrincipal" alt="Imagen principal" class="main-image" />
+        </div>
+        <div class="thumbnails-grid">
+          <img *ngFor="let img of subasta?.imagenes" 
+               [src]="img" 
+               (click)="imagenPrincipal = img" 
+               [class.active]="imagenPrincipal === img"
+               class="thumbnail" />
+        </div>
+      </div>
+
+      <!-- Description Card -->
+      <div class="info-card description-card">
+        <h3 class="card-title">📋 Descripción</h3>
+        <p class="description-text">{{ subasta?.description }}</p>
+        <div class="seller-info">
+          <span class="seller-label">Vendedor:</span>
+          <span class="seller-name">{{ vendedor?.name }} {{ vendedor?.lastname }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Bidding & Info -->
+    <div class="info-column">
+      
+      <!-- Current Bid Card -->
+      <div class="bid-card highlight-card">
+        <div class="current-bid-header">
+          <span class="bid-label">Oferta Actual</span>
+          <div class="bid-amount">$ {{ pujaMasAlta | number:'1.0-0' }}</div>
+        </div>
+        
+        <!-- Status Message -->
+        <div class="status-message">
+          <div *ngIf="!hayPujas && subastaEnCurso" class="status-badge status-info">
+            💡 Todavía no hay pujas. ¡Sé el primero!
+          </div>
+          <div *ngIf="pujaUserIdMasAlta > 0 && subastaEnCurso" class="status-badge status-winning">
+            🏆 Va ganando: <strong>{{ usuarioGanando?.name }} {{ usuarioGanando?.lastname }}</strong>
+          </div>
+          <div *ngIf="ganador && !subastaEnCurso" class="status-badge status-success">
+            ✅ <strong>Ganador:</strong> {{ usuarioGanando?.name }} {{ usuarioGanando?.lastname }}
+          </div>
+          <div *ngIf="!hayPujas && !subastaEnCurso" class="status-badge status-ended">
+            ⛔ No hubo ganador
+          </div>
+        </div>
+
+        <!-- Bid Controls -->
+        <div class="bid-controls">
+          <div class="input-wrapper">
+            <span class="currency-symbol">$</span>
+            <input type="number" 
+                   [(ngModel)]="puja.valor" 
+                   class="bid-input" 
+                   placeholder="Ingresa tu oferta" />
+          </div>
+          <button class="btn btn-primary btn-large" 
+                  (click)="pujar()" 
+                  [disabled]="!subastaEnCurso">
+            🔨 Pujar Ahora
+          </button>
+          @if (subastaEnCurso) {
+            <button class="btn btn-secondary btn-large" (click)="pujaAutomatica()">
+              ⚡ Activar Puja Automática
+            </button>
+          }
+        </div>
+
+        <div *ngIf="errorMessage" class="error-banner">
+          ⚠️ {{ errorMessage }}
+        </div>
+      </div>
+
+      <!-- Price Info Cards -->
+      <div class="price-grid">
+        <div class="price-info-card">
+          <span class="price-icon">💰</span>
+          <div class="price-details">
+            <span class="price-label">Precio Inicial</span>
+            <span class="price-value">$ {{ subasta?.precioInicial | number:'1.0-0' }}</span>
+          </div>
+        </div>
+        <div class="price-info-card">
+          <span class="price-icon">📈</span>
+          <div class="price-details">
+            <span class="price-label">Incremento Mínimo</span>
+            <span class="price-value">$ {{ subasta?.incrementoFijo | number:'1.0-0' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Component -->
+      <div class="payment-section">
+        <app-pagos-subasta 
+          [subasta]="subasta" 
+          [usuarioGanando]="usuarioGanando" 
+          [userId]="userId" 
+          [deposito]="deposito"
+          [pujaMasAlta]="pujaMasAlta" 
+          [activarNotificacion]="activarNotificacionGanador" 
+          [subastaEnCurso]="subastaEnCurso"
+          (realizoElDeposito)="actualizarDeposito($event)">
+        </app-pagos-subasta>
+      </div>
+
+      <!-- Auctioneer Card -->
+      <div *ngIf="martillero" class="martillero-card info-card">
+        <h3 class="card-title">👨‍⚖️ Martillero Oficial</h3>
+        <div class="martillero-info">
+          <p class="martillero-name">{{ martillero.lastname }}, {{ martillero.name }}</p>
+          <p class="martillero-license">Matrícula: </p>
+        </div>
+        <div class="contact-buttons">
+          <a [href]="'https://wa.me/' + martillero.numberphone" class="btn-contact btn-whatsapp">
+            <span class="contact-icon">💬</span> WhatsApp
+          </a>
+          <a [href]="'mailto:' + martillero.email" class="btn-contact btn-email">
+            <span class="contact-icon">✉️</span> Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Martillero Subasta Component -->
+  <app-martillero-subasta [subastaId]="subastaId"></app-martillero-subasta>
+
+  <!-- Puja Automática Modal -->
+  <app-puja-automatica 
+    [isModalPujaOpen]="isModalPujaAutomaticaOpen" 
+    [userId]="userId" 
+    [subastaId]="subastaId"
+    [realizoElDeposito]="realizoElDeposito" 
+    (cerrar)="isModalPujaAutomaticaOpen = false">
+  </app-puja-automatica>
+
+  <!-- Confirm Modal -->
+  <div *ngIf="isModalOpen" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-icon">⚠️</span>
+        <h4 class="modal-title">Confirmar Puja</h4>
+      </div>
+      <div class="modal-body">
+        <p class="modal-text">Estás por realizar una puja de:</p>
+        <div class="modal-bid-amount">{{ puja.valor | currency:'ARS':'symbol':'1.2-2':'es-AR' }}</div>
+        <p class="modal-question">¿Deseas confirmar esta acción?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-confirm" (click)="aceptarPuja()">Confirmar Puja</button>
+      </div>
+    </div>
+  </div>
+
+</div>

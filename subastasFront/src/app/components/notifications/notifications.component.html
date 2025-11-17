@@ -1,0 +1,14 @@
+<div class="container mt-3">
+  @for (item of notifications; track $index) {
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ item.asunto }}</h5>
+        <p class="card-text">{{ item.cuerpo }}</p>
+        <p class="card-text">
+          <small class="text-muted">{{ item.fechaEnvio }}</small>
+        </p>
+        <button (click)="ocultar(item.id)">Ocultar</button>
+      </div>
+    </div>
+  }
+</div>

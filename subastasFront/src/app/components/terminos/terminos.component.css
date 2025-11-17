@@ -1,0 +1,42 @@
+  .terms-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 2rem;
+    background-color: #e7e7e7;
+    border-radius: 1rem;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+
+  .terms-container h1 {
+    font-weight: bold;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .terms-container h3 {
+    margin-top: 1.8rem;
+    color: #000000;
+  }
+
+  .terms-container h4 {
+    margin-top: 1.2rem;
+    color: #198754;
+  }
+
+  .terms-container ul {
+    padding-left: 1.3rem;
+  }
+
+  .terms-container li {
+    margin-bottom: 0.5rem;
+  }
+
+  .terms-container p {
+    margin-bottom: 0.8rem;
+  }
+
+  .divider {
+    border-top: 2px solid #dee2e6;
+    margin: 3rem 0;
+  }

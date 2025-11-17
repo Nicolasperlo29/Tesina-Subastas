@@ -1,0 +1,120 @@
+.card-subasta {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e5e5e5;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.card-subasta:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    border-color: #c41e3a;
+}
+
+/* Imagen */
+.card-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    background: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #c41e3a;
+    padding: 0.4rem 1rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Contenido */
+.card-contenido {
+    padding: 1.8rem;
+}
+
+.card-contenido h4 {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.ubicacion,
+.fecha-fin {
+    font-size: 0.9rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.ubicacion svg,
+.fecha-fin svg {
+    color: #c41e3a;
+}
+
+/* Footer */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.2rem;
+    border-top: 1px solid #e5e5e5;
+}
+
+.precio-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.precio-label {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.precio {
+    font-size: 2rem;
+    color: #1a1a1a;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+.btn-ver-mas {
+    padding: 0.6rem 1.5rem;
+    background: #1a1a1a;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.3s;
+}
+
+.btn-ver-mas:hover {
+    background: #c41e3a;
+    transform: translateY(-1px);
+}

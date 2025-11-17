@@ -1,0 +1,20 @@
+<div *ngIf="isModalPujaOpen" 
+     class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" 
+     style="background: rgba(0, 0, 0, 0.6); z-index: 1050;">
+
+  <div class="bg-white p-4 rounded-4 shadow-lg text-center" style="max-width: 400px; width: 90%;">
+    
+    <h4 class="text-danger fw-bold mb-3">⚠️ ¡Atención!</h4>
+
+    <p class="mb-2 fs-5">Estás por activar las pujas automaticas</p>
+
+    <label for="montoMaximo">Monto máximo</label>
+    <input type="number" id="montoMaximo" [(ngModel)]="valorMaximoInput" class="form-control mb-3">
+
+    <div class="d-grid gap-2">
+      <button class="btn btn-outline-secondary" (click)="cerrarModal()">Cancelar</button>
+      <button class="btn btn-success" (click)="confirmar()">Confirmar Puja</button>
+    </div>
+
+  </div>
+</div>

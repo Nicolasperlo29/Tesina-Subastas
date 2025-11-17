@@ -1,0 +1,157 @@
+<div>
+
+  @if (categoria == false) {
+  <h1 class="text-center p-5">Que vas a subastar hoy?</h1>
+
+  <div class="contenedorCategorias">
+    <div class="contenedorSecCategorias">
+      <div class="categorias" (click)="confirmarCategoria('Vehiculos')">
+        <!-- <img src="assets/home-vehiculos.png" alt="" class="imagenCategoria">Vehiculos -->
+        <i class="bi bi-car-front" style="font-size: 100px;"></i>Automoviles
+      </div>
+      <div class="categorias" (click)="confirmarCategoria('Productos')">
+        <i class="bi bi-box-seam" style="font-size: 100px;"></i>Productos
+        <!-- <img src="assets/celularPng.png" alt="" class="imagenCategoria">Productos -->
+      </div>
+      <div class="categorias" (click)="confirmarCategoria('Coleccionables')">
+        <i class="bi bi-gem" style="font-size: 100px;"></i>Coleccionables
+        <!-- <img src="assets/cuadro.avif" alt="" class="imagenCategoria">Coleccionables -->
+      </div>
+      <div class="categorias" (click)="confirmarCategoria('Otros')">
+        <i class="bi bi-three-dots" style="font-size: 100px;"></i>Otros
+        <!-- <img src="assets/home-vehiculos.png" alt="" class="imagenCategoria">Otros -->
+      </div>
+    </div>
+  </div>
+  }
+  @if (categoria == true) {
+
+  <div class="container">
+    <div class="header">
+      <h1>🔨 Nueva Subasta</h1>
+      <p>Complete los datos para crear una nueva subasta</p>
+    </div>
+    <p style="margin-bottom: 30px;">Categoria seleccionada: {{ categoriaSeleccionada }}</p>
+    <form [formGroup]="formSubasta" (ngSubmit)="onSubmit()">
+      <!-- Título -->
+      <div class="form-group">
+        <label>Título de la Subasta <span class="required">*</span></label>
+        <input type="text" formControlName="title" placeholder="Ej: Reloj Rolex vintage 1965">
+        <div *ngIf="formSubasta.get('title')?.touched && formSubasta.get('title')?.invalid" class="text-danger">
+          <div *ngIf="formSubasta.get('title')?.errors?.['required']">El título es obligatorio.</div>
+          <div *ngIf="formSubasta.get('title')?.errors?.['minlength']">Debe tener al menos 3 caracteres.</div>
+          <div *ngIf="formSubasta.get('title')?.errors?.['maxlength']">Máximo 40 caracteres.</div>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="form-group">
+        <label>Descripción <span class="required">*</span></label>
+        <textarea formControlName="description"
+          placeholder="Describa detalladamente el artículo a subastar..."></textarea>
+        <div *ngIf="formSubasta.get('description')?.touched && formSubasta.get('description')?.invalid"
+          class="text-danger">
+          <div *ngIf="formSubasta.get('description')?.errors?.['required']">La descripción es obligatoria.</div>
+          <div *ngIf="formSubasta.get('description')?.errors?.['maxlength']">Máximo 250 caracteres.</div>
+        </div>
+      </div>
+
+      <!-- Precio + Incremento -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Precio Base (ARS) <span class="required">*</span></label>
+          <input type="number" formControlName="precioInicial" placeholder="$0.00" min="0">
+          <div *ngIf="formSubasta.get('precioInicial')?.touched && formSubasta.get('precioInicial')?.invalid"
+            class="text-danger">
+            <div *ngIf="formSubasta.get('precioInicial')?.errors?.['required']">El precio es obligatiorio.</div>
+            <div *ngIf="formSubasta.get('precioInicial')?.errors?.['min']">Minimo valor de $ 10.000 .</div>
+            <div *ngIf="formSubasta.get('precioInicial')?.errors?.['max']">Maximo valor de $ 999.999.999 .</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Incremento Fijo (ARS)</label>
+          <input type="number" formControlName="incrementoFijo" placeholder="$100">
+          <div *ngIf="formSubasta.get('incrementoFijo')?.touched && formSubasta.get('incrementoFijo')?.invalid"
+            class="text-danger">
+            <div *ngIf="formSubasta.get('incrementoFijo')?.errors?.['required']">El incremento es obligatiorio.</div>
+            <div *ngIf="formSubasta.get('incrementoFijo')?.errors?.['min']">Minimo valor de $ 1.000 .</div>
+            <div *ngIf="formSubasta.get('incrementoFijo')?.errors?.['max']">Maximo valor de $ 1.000.000 .</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fechas -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fecha de Inicio <span class="required">*</span></label>
+          <input type="datetime-local" [min]="minDateTime" formControlName="fechaInicio">
+        </div>
+
+        <div class="form-group">
+          <label>Fecha de Cierre <span class="required">*</span></label>
+          <input type="datetime-local" [min]="formSubasta.get('fechaInicio')?.value || minDateTime"
+            formControlName="fechaFin">
+        </div>
+      </div>
+
+      <!-- Ubicación -->
+      <div class="form-group">
+        <label>Ubicación</label>
+        <select formControlName="ubicacion">
+          <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
+        </select>
+      </div>
+
+      <!-- Imágenes -->
+      <div class="form-group">
+        <label>Imágenes del Artículo (Min. 3 Imagenes) <span class="required">*</span></label>
+        <div class="file-upload">
+          <input type="url" formControlName="imagen" placeholder="URL de la imagen">
+          <button type="button" class="file-label" (click)="agregarImagen()">📁 Agregar Imagen</button>
+        </div>
+
+        <div class="imagenes">
+          @for (item of imagenes; track $index) {
+          <div class="preview">
+            <img [src]="item" alt="Imagen">
+            <button type="button" (click)="eliminarImagen($index)">×</button>
+          </div>
+          }
+        </div>
+      </div>
+      <!-- ⚠️ Mensaje de error -->
+      <div *ngIf="imagenesError" class="text-danger mt-2">
+        Debes subir al menos 3 imágenes.
+      </div>
+
+      <!-- Botón -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="volver()">Cancelar</button>
+        <button type="submit" class="btn-submit">Crear Subasta</button>
+      </div>
+
+    </form>
+  </div>
+
+  }
+
+</div>
+
+<div *ngIf="isModalOpen"
+  class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+  style="background: rgba(0,0,0,0.6); z-index: 1050;">
+  <div class="bg-white p-4 rounded shadow" style="max-width: 400px; width: 100%;">
+    <h4>Subasta creada</h4>
+    <button class="btn btn-secondary w-100 mt-3" (click)="cerrarModal()">Aceptar</button>
+  </div>
+</div>
+
+<div *ngIf="isModalErrorOpen"
+  class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+  style="background: rgba(0,0,0,0.6); z-index: 1050;">
+  <div class="bg-white p-4 rounded shadow" style="max-width: 400px; width: 100%;">
+    <h4>{{ error }}</h4>
+    <button class="btn btn-secondary w-100 mt-3" (click)="cerrarModal()">Aceptar</button>
+  </div>
+</div>
